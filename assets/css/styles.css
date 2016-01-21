@@ -1,0 +1,104 @@
+body{
+    position: relative;
+}
+.edd_gift_mail_msg {
+    color:#008001;
+    border:solid 2px #008001;
+    padding:10px 20px 10px 20px;
+    font-size: 20px;
+    font-weight: bold;
+    position: absolute;
+    background:#F9F9F9;
+    border-radius: 10px;
+    margin-left:230px;
+    display:none;
+}
+.edd_gift_product_div {
+    background: #FAFAFA none repeat scroll 0 0;
+    border: 1px solid #EEE;
+    border-radius: 4px;
+    height: auto;
+    float: left;
+    width: 95%;
+    padding: 20px 18px 16px;
+    margin-top: 22px;
+}
+.edd_gift_fields {
+    float: left;
+    width: 100%;
+    margin-bottom: 24px;
+}
+.edd_gift_fields label {
+    width: 100%;
+    float: left;
+    margin-bottom: 8px !important;
+    font-weight: 700;
+    color: #757575;
+}
+.edd_gift_fields input[type="text"], .edd_gift_fields input[type="email"] {
+    width: 97%;
+    float: left;
+    color: #757575;
+}
+.edd_gift_fields textarea {
+    width: 97%;
+    height: 80px;
+    resize: none;
+    float: left;
+    color: #757575;
+}
+.edd_gift_close {
+    height: 22px;
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    width: 22px;
+    background: url('../gift-close-icon.png') no-repeat;
+    cursor: pointer;
+}
+.edd_gift_product_btn {
+    background-color: #72DC00 !important;
+    border-radius: 3px !important;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff !important;
+    display: inline-block;
+    padding: 6px 16px !important;
+    text-decoration: none;
+    margin-top: 12px;
+    background-image: none;
+}
+.edd_gift_product_btn:hover {
+    background-image: none;
+    background-color: #72DC00 !important;
+}
+#edd_gift_purchase {
+    background-color: #72DC00 !important;
+    border-radius: 3px !important;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff !important;
+    display: inline-block;
+    padding: 6px 16px !important;
+    text-decoration: none;
+    margin-left: 12px;
+    background-image: none;
+}
+.gift_a_product {
+    background-color: #e3e3e3;
+    border-left: 5px solid #c4c3c3;
+    border-radius: 2px;
+    font-weight: bold;
+    padding: 10px 0 6px 16px;
+}
+.gift_a_product label {
+    cursor: pointer;
+}
+.edd_gift_payment_message {
+    padding: 5px 12px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    background: #f5f5f5 none repeat scroll 0 0;
+    border-left: 4px solid #46b450;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
