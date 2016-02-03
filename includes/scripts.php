@@ -30,8 +30,8 @@ function edd_plugin_name_admin_scripts( $hook ) {
      *				EDD settings page.
      */
     if( $hook == $edd_settings_page ) {
-        wp_enqueue_script( 'edd_plugin_name_admin_js', EDD_PLUGIN_NAME_URL . '/assets/js/admin' . $suffix . '.js', array( 'jquery' ) );
-        wp_enqueue_style( 'edd_plugin_name_admin_css', EDD_PLUGIN_NAME_URL . '/assets/css/admin' . $suffix . '.css' );
+        wp_enqueue_script( 'edd_plugin_name_admin_js', EDD_GIFT_PRODUCT_URL . '/assets/js/admin' . $suffix . '.js', array( 'jquery' ) );
+        wp_enqueue_style( 'edd_plugin_name_admin_css', EDD_GIFT_PRODUCT_URL . '/assets/css/admin' . $suffix . '.css' );
     }
 }
 add_action( 'admin_enqueue_scripts', 'edd_plugin_name_admin_scripts', 100 );
@@ -47,8 +47,8 @@ function edd_plugin_name_scripts( $hook ) {
     // Use minified libraries if SCRIPT_DEBUG is turned off
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-    wp_enqueue_script( 'edd_plugin_name_js', EDD_PLUGIN_NAME_URL . '/assets/js/scripts' . $suffix . '.js', array( 'jquery' ) );
-    wp_enqueue_style( 'edd_plugin_name_css', EDD_PLUGIN_NAME_URL . '/assets/css/styles' . $suffix . '.css' );
+    wp_enqueue_script( 'edd_plugin_name_js', EDD_GIFT_PRODUCT_URL . '/assets/js/scripts' . $suffix . '.js', array( 'jquery' ) );
+    wp_enqueue_style( 'edd_plugin_name_css', EDD_GIFT_PRODUCT_URL . '/assets/css/styles' . $suffix . '.css' );
 }
 add_action( 'wp_enqueue_scripts', 'edd_plugin_name_scripts' );
 

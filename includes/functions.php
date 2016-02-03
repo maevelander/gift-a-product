@@ -24,7 +24,7 @@ function edd_gift_form() {
     <div class="edd_gift_product_div" style="display: none;">
         <?php
             $cart_items = edd_get_cart_contents();
-
+            
             $edd_gift_cart_info = array();
 
             foreach ($cart_items as $gift_data) {
@@ -35,7 +35,7 @@ function edd_gift_form() {
                 );
             }
 
-            $edd_cart_cart_sr = serialize($edd_gift_cart_info);
+            $edd_cart_cart_sr = serialize($edd_gift_cart_info);      
         ?>
         <div class="edd_gift_fields">
             <input type="hidden" name="edd_gift_status" value="yes">
@@ -86,7 +86,7 @@ function edd_gift_product_button() {
 ?>
     <input type="submit" class="edd-submit <?php echo $edd_gift_color; ?> <?php echo $edd_gift_style; ?>" id="edd-gift-purchase-button" name="edd-gift-purchase" value="<?php echo $gift_complete_purchase; ?>" style="display: none;" />
 
-    <a href="#" class="edd_gift_product_btn" style="display: none;"><?php _e('Gift a Product','gift-a-product'); ?></a>
+<!--    <a href="#" class="edd_gift_product_btn" style="display: none;"><?php //_e('Gift a Product','gift-a-product'); ?></a>-->
 <?php
 }
 
