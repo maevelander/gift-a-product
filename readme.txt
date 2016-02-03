@@ -18,7 +18,7 @@ There are no plugin settings (for now), simply activate the plugin.
 
 = Demo =
 
-*	[Click here](http://demo.enigmaweb.com.au/edd-gift/) for out-of-the-box demo. The shop is in Test mode so no live transactions are processed.
+*	[Click here](http://demo.enigmaweb.com.au/downloads/edd-gift/) for out-of-the-box demo. The shop is in Test mode so no live transactions are processed.
 
 = Languages =
 
