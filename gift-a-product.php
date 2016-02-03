@@ -132,29 +132,43 @@ function edd_gift_product_scripts() {
     wp_enqueue_script('edd_gift_script', EDD_GIFT_PRODUCT_URL . 'assets/js/scripts.js', array(), '1.0.0', true);
 }
 
-add_action('wp_ajax_edd_gift_email_values', 'edd_gift_send_email');
-add_action('wp_ajax_nopriv_edd_gift_email_values', 'edd_gift_send_email');
+// Creating AJAX for saving value in databsae
+add_action('wp_ajax_edd_gift_email_values', 'edd_gift_check_value');
+add_action('wp_ajax_nopriv_edd_gift_email_values', 'edd_gift_check_value');
 
-// ajax
 add_action("wp_head", "edd_gift_email_ajax");
-function edd_gift_email_ajax()
-{
+function edd_gift_email_ajax() {
     ?>
     <script type="text/javascript">
         jQuery(document).ready(function () {
-            jQuery(".edd_gift_product_btn").click(function () {
+            jQuery("#edd-gift-purchase").click(function(){
+                if(jQuery(this).is(":checked")) {
+                    jQuery("#edd-purchase-button").hide();
+                    jQuery(".edd_gift_product_div").fadeIn(300);
 
-                var edd_gift_cart_info = jQuery('.cart_info').val();
+                    jQuery("#edd-gift-purchase-button").clone().appendTo(".edd_gift_product_div");
+                    jQuery("#edd-gift-purchase-button").show();
+                } else {
+                    jQuery(".edd_gift_product_div").fadeOut();
+                    jQuery("#edd-gift-purchase-button").hide();
 
+                    jQuery("#edd-purchase-button").show();
+                }
+            });
+            
+            jQuery("#edd-gift-purchase").click(function () {
+                var gift_method = jQuery(this).is(":checked") ? 'save' : 'delete';
+                var cart_info = jQuery('.cart_info').val();
+                
                 var data = {
                     action: 'edd_gift_email_values',
-                    edd_email_cart_info: edd_gift_cart_info
-                }
-
+                    edd_gift_method: gift_method,
+                    cart_info: cart_info,
+                };
+                
                 jQuery.post('<?php echo admin_url('admin-ajax.php'); ?>', data, function (result) {
                     //alert(result);
                 });
-
             });
         });
 
@@ -173,13 +187,11 @@ function edd_gift_email_ajax()
         ?>
                 jQuery(document).ready(function () {
                     jQuery("#edd-purchase-button").hide();
-                    jQuery(".edd_gift_product_btn").show();
 
                     jQuery("#edd-gift-purchase-button").clone().appendTo(".edd_gift_product_div");
                     jQuery("#edd-gift-purchase-button").show();
 
                     jQuery(".edd_gift_product_div").show();
-                    jQuery(".edd_gift_product_btn").hide();
                 });
         <?php
             }
@@ -188,18 +200,26 @@ function edd_gift_email_ajax()
     <?php
 }
 
-function edd_gift_send_email() {
+// Save and delete values in database
+function edd_gift_check_value() {
     global $wpdb;
 
-    $edd_gift_info = stripcslashes($_REQUEST['edd_email_cart_info']);
+    $edd_gift_method = $_REQUEST['edd_gift_method'];
+    $info = stripcslashes( $_REQUEST['cart_info'] );
+    $cart_info = unserialize( $info );
 
-    $edd_cart_info_un_sr = unserialize($edd_gift_info);
+    foreach( $cart_info as $edd_gift_cart_info ) {
+        $edd_gift_prod_id = $edd_gift_cart_info['edd_gift_prod_id'];
 
-    foreach ($edd_cart_info_un_sr as $user_gift_cart) {
-        $edd_gift_prod_user_id = $user_gift_cart['edd_gift_prod_id'];
-
-        echo $edd_gift_prod_user_id;
-
-        update_post_meta($edd_gift_prod_user_id, 'edd_gift_this_product', '1');
+        switch( $edd_gift_method ){
+            case 'save':
+                //echo "Save Data";
+                update_post_meta($edd_gift_prod_id, 'edd_gift_this_product', '1');
+            break;
+            case 'delete':
+                //echo "Delet Data";
+                delete_post_meta($edd_gift_prod_id, 'edd_gift_this_product', '1');
+            break;  
+        }
     }
 }
