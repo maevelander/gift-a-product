@@ -13,34 +13,25 @@ if (!defined('ABSPATH')) exit;
 // EDD Gift Form
 function edd_gift_form() {
     global $wpdb;
+    
+    $edd_gift_status = get_option('edd_gift_product');
 ?>
     <div class="gift_a_product">
         <label class="edd-label" for="edd-gift-purchase">
-            <?php _e('Purchase as gift', 'gift-a-product'); ?>
-            <input type="checkbox" id="edd-gift-purchase" />
+            <?php
+                _e('Purchase as gift', 'gift-a-product');
+                
+                $edd_checked_checkbox = '';
+                if($edd_gift_status == 'on') {
+                    $edd_checked_checkbox = 'checked';
+                }
+            ?>
+            <input type="checkbox" id="edd-gift-purchase" <?php echo $edd_checked_checkbox; ?> />
         </label>
     </div>
 
-    <div class="edd_gift_product_div" style="display: none;">
-        <?php
-            $cart_items = edd_get_cart_contents();
-            
-            $edd_gift_cart_info = array();
-
-            foreach ($cart_items as $gift_data) {
-                $edd_gift_prod_id = $gift_data['id'];
-
-                $edd_gift_cart_info[] = array(
-                    'edd_gift_prod_id' => $edd_gift_prod_id,
-                );
-            }
-
-            $edd_cart_cart_sr = serialize($edd_gift_cart_info);      
-        ?>
+    <div class="edd_gift_product_div" style="display: <?php echo ($edd_gift_status == 'on' ? 'block' : 'none') ?>;">
         <div class="edd_gift_fields">
-            <input type="hidden" name="edd_gift_status" value="yes">
-            <input type="hidden" class="cart_info" value='<?php echo $edd_cart_cart_sr; ?>'>
-
             <label class="edd-label" for="edd-gift-name">
                 <?php _e('Recipient Name', 'gift-a-product'); ?>
                 <span class="edd-required-indicator">*</span>
@@ -86,20 +77,11 @@ function edd_gift_product_button() {
 ?>
     <input type="submit" class="edd-submit <?php echo $edd_gift_color; ?> <?php echo $edd_gift_style; ?>" id="edd-gift-purchase-button" name="edd-gift-purchase" value="<?php echo $gift_complete_purchase; ?>" style="display: none;" />
 
-<!--    <a href="#" class="edd_gift_product_btn" style="display: none;"><?php //_e('Gift a Product','gift-a-product'); ?></a>-->
 <?php
 }
 
-global $wpdb;
-
-$edd_gift_sql = $wpdb->get_results("Select * From ".$wpdb->postmeta." Where meta_key = 'edd_gift_this_product'");
-
-$edd_gift_this_product = '';
-foreach ($edd_gift_sql as $edd_gift_row) {
-    $edd_gift_this_product = $edd_gift_row->meta_value;
-}
-
-if($edd_gift_this_product == '1') {
+$edd_gift_this_product = get_option('edd_gift_product');
+if($edd_gift_this_product == 'on') {
 
     function edd_gift_required_checkout_fields($required_fields) {
         $required_fields = array(
@@ -141,7 +123,6 @@ if($edd_gift_this_product == '1') {
 
 // EDD Form Value Save
     function edd_gift_value_store($payment_meta) {
-        $payment_meta['edd_gift_status'] = isset($_POST['edd_gift_status']) ? $_POST['edd_gift_status'] : '';
         $payment_meta['edd_gift_name'] = isset($_POST['edd_gift_name']) ? $_POST['edd_gift_name'] : '';
         $payment_meta['edd_gift_email'] = isset($_POST['edd_gift_email']) ? $_POST['edd_gift_email'] : '';
         $payment_meta['edd_gift_message'] = isset($_POST['edd_gift_message']) ? $_POST['edd_gift_message'] : '';
@@ -282,35 +263,29 @@ if($edd_gift_this_product == '1') {
 }
 
 function edd_gift_message() {
-    global $edd_receipt_args;
-    $payment   = get_post( $edd_receipt_args['id'] );
+    $edd_gift_status = get_option('edd_gift_product');
 
-    $edd_gift_payment_ID =  edd_get_payment_number( $payment->ID );
-    $_edd_payment_meta = get_post_meta($edd_gift_payment_ID, '_edd_payment_meta', true);
+    if($edd_gift_status == 'on') {
+        global $edd_receipt_args;
+        $payment   = get_post( $edd_receipt_args['id'] );
 
-//    echo "<pre>";
-//    print_r($_edd_payment_meta);
-//    echo "</pre>";
+        $edd_gift_payment_ID =  edd_get_payment_number( $payment->ID );
+        $_edd_payment_meta = get_post_meta($edd_gift_payment_ID, '_edd_payment_meta', true);
 
-    $edd_gift_first_name = $_edd_payment_meta['user_info']['first_name'];
-    $edd_gift_reciept_name = $_edd_payment_meta['edd_gift_name'];
-    $edd_gift_status = $_edd_payment_meta['edd_gift_status'];
+    //    echo "<pre>";
+    //    print_r($_edd_payment_meta);
+    //    echo "</pre>";
 
-    if(!empty($edd_gift_status)) {
+        $edd_gift_first_name = $_edd_payment_meta['user_info']['first_name'];
+        $edd_gift_reciept_name = $_edd_payment_meta['edd_gift_name'];
 ?>
         <div class="edd_gift_payment_message">
             <?php echo $edd_gift_first_name; ?>, <?php _e('you purchased this product(s) as a gift. An email has been sent to','gift-a-product'); ?>
             <strong><?php echo $edd_gift_reciept_name; ?></strong> <?php _e('with the downloads and message.','gift-a-product'); ?>
         </div>
 <?php
-    }
+    } 
 
-    $edd_downloads_meta = $_edd_payment_meta['downloads'];
-
-    foreach($edd_downloads_meta as $edd_downloads) {
-        $edd_downloads_id =  $edd_downloads['id'];
-
-        delete_post_meta($edd_downloads_id, 'edd_gift_this_product', '1');
-    }
+    update_option('edd_gift_product', 'off');
 }
 add_action('edd_payment_receipt_before', 'edd_gift_message');

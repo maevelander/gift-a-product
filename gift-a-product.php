@@ -120,6 +120,8 @@ add_action('plugins_loaded', 'EDD_Gift_Product_load');
 
 function edd_plugin_name_activation() {
     /* Activation functions here */
+    
+    add_option('edd_gift_product','off','','yes');
 }
 
 register_activation_hook(__FILE__, 'edd_plugin_name_activation');
@@ -158,12 +160,10 @@ function edd_gift_email_ajax() {
             
             jQuery("#edd-gift-purchase").click(function () {
                 var gift_method = jQuery(this).is(":checked") ? 'save' : 'delete';
-                var cart_info = jQuery('.cart_info').val();
                 
                 var data = {
                     action: 'edd_gift_email_values',
-                    edd_gift_method: gift_method,
-                    cart_info: cart_info,
+                    edd_gift_method: gift_method
                 };
                 
                 jQuery.post('<?php echo admin_url('admin-ajax.php'); ?>', data, function (result) {
@@ -171,55 +171,22 @@ function edd_gift_email_ajax() {
                 });
             });
         });
-
-        <?php
-            global $wpdb;
-
-            $sql = $wpdb->get_results("Select * From ".$wpdb->postmeta." Where meta_key = 'edd_gift_this_product'");
-
-            $edd_gift_this_product = '';
-            foreach ($sql as $row) {
-                $edd_gift_this_product = $row->meta_value;
-            }
-            echo $edd_gift_this_product;
-
-            if($edd_gift_this_product == '1') {
-        ?>
-                jQuery(document).ready(function () {
-                    jQuery("#edd-purchase-button").hide();
-
-                    jQuery("#edd-gift-purchase-button").clone().appendTo(".edd_gift_product_div");
-                    jQuery("#edd-gift-purchase-button").show();
-
-                    jQuery(".edd_gift_product_div").show();
-                });
-        <?php
-            }
-        ?>
     </script>
     <?php
 }
 
 // Save and delete values in database
 function edd_gift_check_value() {
-    global $wpdb;
-
     $edd_gift_method = $_REQUEST['edd_gift_method'];
-    $info = stripcslashes( $_REQUEST['cart_info'] );
-    $cart_info = unserialize( $info );
 
-    foreach( $cart_info as $edd_gift_cart_info ) {
-        $edd_gift_prod_id = $edd_gift_cart_info['edd_gift_prod_id'];
-
-        switch( $edd_gift_method ){
-            case 'save':
-                //echo "Save Data";
-                update_post_meta($edd_gift_prod_id, 'edd_gift_this_product', '1');
-            break;
-            case 'delete':
-                //echo "Delet Data";
-                delete_post_meta($edd_gift_prod_id, 'edd_gift_this_product', '1');
-            break;  
-        }
+    switch( $edd_gift_method ){
+        case 'save':
+            //echo "Save Data";
+            update_option('edd_gift_product', 'on');
+        break;
+        case 'delete':
+            //echo "Delete Data";
+            update_option('edd_gift_product', 'off');
+        break;  
     }
 }
