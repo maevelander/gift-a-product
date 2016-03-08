@@ -74,10 +74,6 @@ function edd_gift_product_button() {
     }
 
     ob_start();
-?>
-    <input type="submit" class="edd-submit <?php echo $edd_gift_color; ?> <?php echo $edd_gift_style; ?>" id="edd-gift-purchase-button" name="edd-gift-purchase" value="<?php echo $gift_complete_purchase; ?>" style="display: none;" />
-
-<?php
 }
 
 $edd_gift_this_product = get_option('edd_gift_product');
