@@ -3,7 +3,7 @@
  * Plugin Name:     Gift a Product - Easy Digital Downloads
  * Plugin URI:      https://enigmaplugins.com
  * Description:     Gift a Product extension for Easy Digital Downloads
- * Version:         1.0.0
+ * Version:         1.1
  * Author:          Enigma Plugins
  * Author URI:      https://enigmaplugins.com
  * Text Domain:     gift-a-product
@@ -36,7 +36,7 @@ if (!class_exists('EDD_Gift_Product')) {
 
         private function setup_constants() {
             // Plugin version
-            define('EDD_GIFT_PRODUCT_VER', '1.0.0');
+            define('EDD_GIFT_PRODUCT_VER', '1.1.0');
 
             // Plugin path
             define('EDD_GIFT_PRODUCT_DIR', plugin_dir_path(__FILE__));
@@ -116,14 +116,40 @@ function EDD_Gift_Product_load() {
     }
 }
 
+add_action('admin_menu', 'edd_gift_plugin_menu');
+function edd_gift_plugin_menu() {
+    add_submenu_page('edit.php?post_type=download', 'Gift Email Template', 'Gift Email Template', 'manage_options', 'edd-gift-mail', 'edd_gift_mail_template');
+}
+
+function edd_gift_mail_template() {
+    require "includes/gift-email-template.php";
+}
 add_action('plugins_loaded', 'EDD_Gift_Product_load');
+
+add_action('admin_init', 'ajc_register_settings');
+function ajc_register_settings() {
+    register_setting('ajc_settings_group', 'edd_gift_product');
+    register_setting('ajc_settings_group', 'edd_gift_email_template');
+}
 
 function edd_plugin_name_activation() {
     /* Activation functions here */
     
     add_option('edd_gift_product','off','','yes');
-}
 
+    $edd_gift_settings = get_option('edd_settings');
+    $edd_gift_expire_time = $edd_gift_settings['download_link_expiration'];
+
+    $edd_gift_template_content = "
+                                    <p>Dear {gift_recipient_name},</p>
+                                    <p>You've got gift from {gift_purchaser}.</p>
+                                    <p>Here is your message from</p>
+                                    <p>{your_gift_message}</p>
+                                    <p>Please click on the links(s) below to download your files. Best to grab 'em now as the links expire in {gift_time_limit} hrs.</p>
+                                ";
+
+    add_option('edd_gift_email_template', $edd_gift_template_content, '', 'yes');
+}
 register_activation_hook(__FILE__, 'edd_plugin_name_activation');
 
 // EDD Scripts & Style
@@ -133,6 +159,15 @@ function edd_gift_product_scripts() {
 
     wp_enqueue_script('edd_gift_script', EDD_GIFT_PRODUCT_URL . 'assets/js/scripts.js', array(), '1.0.0', true);
 }
+
+function edd_gift_admin_enqueue() {
+    wp_enqueue_style('edd_gift_admin_style', EDD_GIFT_PRODUCT_URL . 'assets/css/admin.css');
+
+    wp_enqueue_script('editor');
+    wp_enqueue_script('thickbox');
+    wp_enqueue_script('media-upload');
+}
+add_action('admin_enqueue_scripts', 'edd_gift_admin_enqueue'); 
 
 // Creating AJAX for saving value in databsae
 add_action('wp_ajax_edd_gift_email_values', 'edd_gift_check_value');
@@ -163,13 +198,17 @@ function edd_gift_email_ajax() {
                     //alert(result);
                 });
             });
+
         });
+
     </script>
     <?php
 }
 
-// Save and delete values in database
+//Save and delete values in database
 function edd_gift_check_value() {
+
+    // echo "ok";
     $edd_gift_method = $_REQUEST['edd_gift_method'];
 
     switch( $edd_gift_method ){
@@ -183,3 +222,4 @@ function edd_gift_check_value() {
         break;  
     }
 }
+

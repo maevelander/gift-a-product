@@ -42,6 +42,9 @@ None yet.
 
 == Changelog ==
 
+= 1.1 =
+* Add new feature for gift email custom message
+
 = 1.0 =
 * Initial release
 
