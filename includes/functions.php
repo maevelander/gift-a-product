@@ -15,6 +15,9 @@ function edd_gift_form() {
     global $wpdb;
     
     $edd_gift_status = get_option('edd_gift_product');
+
+    $edd_gift_settings = get_option('edd_settings');
+    $edd_gift_expire_time = $edd_gift_settings['download_link_expiration'];
 ?>
     <div class="gift_a_product">
         <label class="edd-label" for="edd-gift-purchase">
@@ -49,11 +52,12 @@ function edd_gift_form() {
         </div>
         <div class="edd_gift_fields">
             <label class="edd-label" for="edd-gift-message">
-                <?php _e('Message', 'gift-a-product'); ?>
+                <?php _e('Message to Recipient', 'gift-a-product'); ?>
             </label>
             <textarea class="edd-input" name="edd_gift_message" id="edd-gift-message"
-                      placeholder="<?php _e('Message', 'gift-a-product'); ?>"></textarea>
+                      placeholder="<?php _e('Message to Recipient', 'gift-a-product'); ?>"></textarea>
         </div>
+
     </div>
 <?php
 }
@@ -97,7 +101,6 @@ if($edd_gift_this_product == 'on') {
 
         return $required_fields;
     }
-
     add_filter('edd_purchase_form_required_fields', 'edd_gift_required_checkout_fields');
 
 // check for errors with out custom fields
@@ -114,7 +117,6 @@ if($edd_gift_this_product == 'on') {
             edd_set_error('invalid_name', 'Please enter your name');
         }
     }
-
     add_action('edd_checkout_error_checks', 'edd_gift_validate_checkout_fields', 10, 2);
 
 // EDD Form Value Save
@@ -125,7 +127,6 @@ if($edd_gift_this_product == 'on') {
 
         return $payment_meta;
     }
-
     add_filter('edd_payment_meta', 'edd_gift_value_store');
 
     function pw_edd_on_complete_purchase($payment_id) {
@@ -144,6 +145,30 @@ if($edd_gift_this_product == 'on') {
         $edd_gift_name = $payment_meta['edd_gift_name'];
         $edd_gift_email = $payment_meta['edd_gift_email'];
         $edd_gift_message = $payment_meta['edd_gift_message'];
+
+        $edd_gift_email_template = wpautop(get_option('edd_gift_email_template'));
+
+        $edd_gift_settings = get_option('edd_settings');
+        $edd_check_ship_product = get_option('edd_ship_product');
+
+        $edd_gift_expire_time = $edd_gift_settings['download_link_expiration'];
+
+
+        if(strpos($edd_gift_email_template, '{gift_recipient_name}') !== FALSE) {
+            $edd_gift_email_template = str_ireplace('{gift_recipient_name}', $edd_gift_name, $edd_gift_email_template);
+        }
+
+        if(strpos($edd_gift_email_template, '{gift_purchaser}') !== FALSE) {
+            $edd_gift_email_template = str_ireplace('{gift_purchaser}', $edd_gift_user_info_fname . ' ' . $edd_gift_user_info_lname, $edd_gift_email_template);
+        }
+
+        if(strpos($edd_gift_email_template, '{your_gift_message}') !== FALSE) {
+            $edd_gift_email_template = str_ireplace('{your_gift_message}', $edd_gift_message, $edd_gift_email_template);
+        }
+
+        if(strpos($edd_gift_email_template, '{gift_time_limit}') !== FALSE) {
+            $edd_gift_email_template = str_ireplace('{gift_time_limit}', $edd_gift_expire_time, $edd_gift_email_template);
+        }
 
         // Key
         $edd_gift_key = $payment_meta['key'];
@@ -167,7 +192,7 @@ if($edd_gift_this_product == 'on') {
                                     float: left;'";
         $edd_gift_mail_h4 = "style='
                                 font-size: 15px;
-                                margin: 10px 0 0;
+                                margin: 10px 0 12px;
                                 padding: 0;'";
         $edd_gift_mail_list_body = "style='
                                     float: left;
@@ -188,16 +213,18 @@ if($edd_gift_this_product == 'on') {
                                 padding: 6px 0 12px;
                                 line-height: 18px;'";
 
-        $edd_gift_settings = get_option('edd_settings');
-        $edd_gift_expire_time = $edd_gift_settings['download_link_expiration'];
-
         $edd_gift_email_body .= "<div " . $edd_gift_mail_body . ">";
         $edd_gift_email_body .= "<div " . $edd_gift_mail_content . ">";
         $edd_gift_email_body .= "<h3>Hi $edd_gift_name,</h3>";
-        $edd_gift_email_body .= "<p>You lucky thing! " . $edd_gift_user_info_fname . ' ' . $edd_gift_user_info_lname . " has just sent you a gift.</p>";
-        $edd_gift_email_body .= "<p>Please click on the links(s) below to download your files. Best to grab 'em now as  the linkes expire in  <strong>$edd_gift_expire_time hrs</strong></p>";
-        $edd_gift_email_body .= "<strong>Message From " . $edd_gift_user_info_fname . ' ' . $edd_gift_user_info_lname . "</strong>" . "<br>";
-        $edd_gift_email_body .= "<p>" . $edd_gift_message . "</p>";
+        if(!empty($edd_gift_email_template)) {
+            $edd_gift_email_body .= $edd_gift_email_template;
+        } else {
+            $edd_gift_email_body .= "<p>You lucky thing! " . $edd_gift_user_info_fname . ' ' . $edd_gift_user_info_lname . " has just sent you a gift.</p>";
+            $edd_gift_email_body .= "<p>Please click on the links(s) below to download your files. Best to grab 'em now as  the linkes expire in  <strong>$edd_gift_expire_time hrs</strong></p>";
+
+            $edd_gift_email_body .= "<strong>Message From " . $edd_gift_user_info_fname . ' ' . $edd_gift_user_info_lname . "</strong>" . "<br>";
+            $edd_gift_email_body .= "<p>" . $edd_gift_message . "</p>";
+        }
         $edd_gift_email_body .= "</div>";
 
         $edd_gift_email_body .= "<div " . $edd_gift_mail_list_body . ">";
@@ -221,17 +248,21 @@ if($edd_gift_this_product == 'on') {
 
             $edd_gift_email_body .= "<div " . $edd_gift_mail_list . ">";
             $edd_gift_email_body .= "<h4 " . $edd_gift_mail_h4 . ">" . $get_gift_prod_name . " </h4>";
-            $edd_gift_email_body .= "<ul " . $edd_gift_mail_ul . ">";
 
-            foreach ($files as $filekey => $file) {
-                $file_url = edd_get_download_file_url($edd_gift_key, $edd_gift_user_info_email, $filekey, $gift_prod_ID, $price_ID);
+            if($edd_check_ship_product != 'yes') {
 
-                $edd_gift_email_body .= "<li " . $edd_gift_mail_li . ">
-                                        <strong>" . $file['name'] . "</strong><br>
-                                        <a href='" . $file_url . "' target='_blank' download title='" . $file['name'] . "'>Download</a>
-                                     </li>";
-            }
-            $edd_gift_email_body .= "</ul>";
+	            $edd_gift_email_body .= "<ul " . $edd_gift_mail_ul . ">";
+
+	            foreach ($files as $filekey => $file) {
+	                $file_url = edd_get_download_file_url($edd_gift_key, $edd_gift_user_info_email, $filekey, $gift_prod_ID, $price_ID);
+
+	                $edd_gift_email_body .= "<li " . $edd_gift_mail_li . ">
+	                                        <strong>" . $file['name'] . "</strong><br>
+	                                        <a href='" . $file_url . "' target='_blank' download title='" . $file['name'] . "'>Download</a>
+	                                     </li>";
+	            }
+	            $edd_gift_email_body .= "</ul>";
+        	}
             $edd_gift_email_body .= "</div>";
 
             if ($i % 2 == 0) {
@@ -254,7 +285,6 @@ if($edd_gift_this_product == 'on') {
         @mail($edd_gift_email, $edd_gift_user_info_fname . ' send you gift', $edd_gift_email_body, $headers);
 
     }
-
     add_action('edd_complete_purchase', 'pw_edd_on_complete_purchase');
 }
 
@@ -268,9 +298,9 @@ function edd_gift_message() {
         $edd_gift_payment_ID =  edd_get_payment_number( $payment->ID );
         $_edd_payment_meta = get_post_meta($edd_gift_payment_ID, '_edd_payment_meta', true);
 
-    //    echo "<pre>";
-    //    print_r($_edd_payment_meta);
-    //    echo "</pre>";
+       // echo "<pre>";
+       // print_r($_edd_payment_meta);
+       // echo "</pre>";
 
         $edd_gift_first_name = $_edd_payment_meta['user_info']['first_name'];
         $edd_gift_reciept_name = $_edd_payment_meta['edd_gift_name'];

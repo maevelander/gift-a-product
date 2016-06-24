@@ -47,6 +47,14 @@ body{
     float: left;
     color: #757575;
 }
+.edd_gift_fields select {
+    width: 70%;
+    float: left;
+    color: #757575;
+    background: none;
+    border: 1px solid #CCC;
+    padding: 6px 0;
+}
 .edd_gift_close {
     height: 22px;
     position: absolute;
@@ -101,4 +109,27 @@ body{
     border-left: 4px solid #46b450;
     font-size: 14px;
     margin-bottom: 15px;
+}
+.edd_gift_shipping {
+    border-top: 1px solid #EEE;
+    float: left;
+    padding-top: 12px;
+    width: 100%;
+}
+.edd_gift_shipping span.edd_gift_shipping_check {
+    display: block;
+    margin-bottom: 22px;
+}
+.edd_gift_shipping .edd_gift_shipping_body {
+    float: left;
+    background-color: #FEFEFE;
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #EEE;
+}
+.edd_gift_shipping_body h3 {
+    margin: 10px 0 22px 0;
+    padding: 0;
+    font-size: 20px;
 }
