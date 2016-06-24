@@ -1,0 +1,89 @@
+# Copyright (C) 2016 Gift a Product - Easy Digital Downloads
+# This file is distributed under the same license as the Gift a Product - Easy Digital Downloads package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Gift a Product - Easy Digital Downloads 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/gift-a-product\n"
+"POT-Creation-Date: 2016-06-24 05:55:25+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2016-06-24 13:56+0800\n"
+"Last-Translator: Maeve Lander <support@enigmaplugins.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: Poedit 1.5.7\n"
+
+#: gift-a-product.php:95
+msgid "Plugin Name Settings"
+msgstr ""
+
+#: gift-a-product.php:96
+msgid "Configure Plugin Name Settings"
+msgstr ""
+
+#: includes/class.extension-activation.php:47
+msgid "This plugin"
+msgstr ""
+
+#: includes/class.extension-activation.php:84
+msgid "activate it"
+msgstr ""
+
+#: includes/class.extension-activation.php:87
+msgid "install it"
+msgstr ""
+
+#: includes/class.extension-activation.php:90
+msgid " requires Easy Digital Downloads! Please %s to continue!"
+msgstr ""
+
+#: includes/functions.php:22
+msgid "Purchase as gift"
+msgstr ""
+
+#: includes/functions.php:36 includes/functions.php:40
+msgid "Recipient Name"
+msgstr ""
+
+#: includes/functions.php:44 includes/functions.php:48
+msgid "Recipient Email"
+msgstr ""
+
+#: includes/functions.php:52 includes/functions.php:55
+msgid "Message"
+msgstr ""
+
+#: includes/functions.php:71
+msgid "Purchase"
+msgstr ""
+
+#: includes/functions.php:73
+msgid "Free Download"
+msgstr ""
+
+#: includes/functions.php:279
+msgid "you purchased this product(s) as a gift. An email has been sent to"
+msgstr ""
+
+#: includes/functions.php:280
+msgid "with the downloads and message."
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Gift a Product - Easy Digital Downloads"
+msgstr ""
+
+#. #-#-#-#-#  plugin.pot (Gift a Product - Easy Digital Downloads 1.0.0)  #-#-#-#-#
+#. Plugin URI of the plugin/theme
+#. #-#-#-#-#  plugin.pot (Gift a Product - Easy Digital Downloads 1.0.0)  #-#-#-#-#
+#. Author URI of the plugin/theme
+msgid "https://enigmaplugins.com"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Gift a Product extension for Easy Digital Downloads"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Enigma Plugins"
+msgstr ""

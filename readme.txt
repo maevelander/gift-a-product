@@ -43,12 +43,15 @@ None yet.
 == Changelog ==
 
 = 1.1 =
-* Add new feature for gift email custom message
+* New feature - custom email template
 
 = 1.0 =
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.1 =
+* New feature - adds the ability to customise email template
 
 = 1.0 =
 * Initial release
