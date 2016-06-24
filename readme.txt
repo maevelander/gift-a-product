@@ -14,7 +14,7 @@ Gift a product extension for Easy Digital Downloads
 
 Simple extension for Easy Digital Downloads allowing users to 'gift a product'. Checkbox is added at checkout - when checked, the customer can enter gift recipient name, email and a gift message.
 
-There are no plugin settings (for now), simply activate the plugin.
+You can customise the email template via Downloads > Gift Email Template
 
 = Demo =
 
@@ -29,6 +29,7 @@ Would you like to help translate the plugin into more languages? It's very easy 
 
 1. Upload the `gift-a-product` folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the WordPress 'Plugins' dashboard.
+1. Customise the email template via Downloads > Gift Email Template
 
 == Frequently Asked Questions ==
 
@@ -43,7 +44,7 @@ None yet.
 == Changelog ==
 
 = 1.1 =
-* New feature - custom email template
+* New feature - adds the ability to customise email template
 
 = 1.0 =
 * Initial release
