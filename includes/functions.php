@@ -282,7 +282,7 @@ if($edd_gift_this_product == 'on') {
         // More headers
         $headers .= 'From: <' . $edd_gift_user_info_email . '>' . "\r\n";
 
-        @mail($edd_gift_email, $edd_gift_user_info_fname . ' send you gift', $edd_gift_email_body, $headers);
+        @mail($edd_gift_email, $edd_gift_user_info_fname . ' sent you a gift!', $edd_gift_email_body, $headers);
 
     }
     add_action('edd_complete_purchase', 'pw_edd_on_complete_purchase');
