@@ -45,6 +45,7 @@ None yet.
 
 = 1.1 =
 * New feature - adds the ability to customise email template
+* Fix typo in email subject line
 
 = 1.0 =
 * Initial release
